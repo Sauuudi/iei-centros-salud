@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormularioCargaComponent } from './formulario-carga/formulario-carga.component';
 import { FormularioBusquedaComponent } from './formulario-busqueda/formulario-busqueda.component';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FormularioCargaComponent,
-    FormularioBusquedaComponent
+    FormularioBusquedaComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
