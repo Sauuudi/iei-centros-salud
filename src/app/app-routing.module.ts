@@ -6,7 +6,7 @@ import { FormularioCargaComponent } from './formulario-carga/formulario-carga.co
 const routes: Routes = [
   {
     path: 'busqueda',
-    title: 'FORMULARIO BUUSQUEDA',
+    title: 'FORMULARIO BUSQUEDA',
     component: FormularioBusquedaComponent,
   },
   {
