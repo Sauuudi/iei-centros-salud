@@ -41,7 +41,7 @@ export class FormularioBusquedaComponent implements OnInit {
             url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           }),
         }),
-        //layer de markers, para añair mas es al source
+        //layer de markers, para añadir mas es al source
         new VectorLayer({
           source: this.markerSource,
           style: new Style({
