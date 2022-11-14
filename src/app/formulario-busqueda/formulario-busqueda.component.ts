@@ -11,6 +11,7 @@ import VectorLayer from 'ol/layer/Vector';
 import Style from 'ol/style/Style';
 import Icon from 'ol/style/Icon';
 import FullScreen from 'ol/control/FullScreen';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-formulario-busqueda',
   templateUrl: './formulario-busqueda.component.html',
@@ -19,10 +20,23 @@ import FullScreen from 'ol/control/FullScreen';
 export class FormularioBusquedaComponent implements OnInit {
   map?: Map;
   markerSource?: VectorSource;
+  searchForm!: FormGroup; 
+
+  constructor(private fb: FormBuilder){}
 
   ngOnInit(): void {
     this.createMap();
     this.initializeListeners();
+    this.checkForm()
+  }
+
+  checkForm(){
+    this.searchForm = this.fb.group({
+      city: [''],
+      postal: ['', Validators.pattern('[0-9]{5}')],
+      prov: ['Cualquiera'],
+      type: ['Cualquiera']
+    })
   }
 
   private createMap() {
@@ -90,5 +104,10 @@ export class FormularioBusquedaComponent implements OnInit {
         );
       }
     });
+  }
+
+  public onSearch(){
+    const {city, postal, prov, type} = this.searchForm.value
+    //Añadir petición de búsqueda
   }
 }

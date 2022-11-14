@@ -2,24 +2,33 @@
     <div class="row p-3">
         <p class="fs-1">Buscador de centros de salud</p>
     </div>
-    <div class="row p-3 justify-content-center">        
+    <div class="row p-3 justify-content-center">   
         <div class="container-md col col-4" > 
-            <form class="text-start">
+            <form class="text-start" [formGroup]="searchForm">
                 <div class="mb-3">
                     <label for="localidadInput" class="form-label">Localidad</label>
-                    <input type="text" class="form-control" id="localidadInput" placeholder="Cualquiera">
+                    <input type="text" class="form-control" id="localidadInput" placeholder="Cualquiera" formControlName="city">
                 </div>
                 <div class="mb-3">
                     <label for="codigoPostalInput" class="form-label">Cod. Postal</label>
-                    <input type="text" class="form-control" id="codigoPostalInput" placeholder="Cualquiera">
+                    <input type="text" class="form-control" id="codigoPostalInput" placeholder="Cualquiera" formControlName="postal">
                 </div>
                 <div class="mb-3">
                     <label for="provinciaInput" class="form-label">Provincia</label>
-                    <input type="text" class="form-control" id="provinciaInput" placeholder="Cualquiera">
+                    <select class="form-select" id="provinciaInput" formControlName="prov">
+                        <option>Cualquiera</option>
+                        <option>Castellón</option>
+                        <option>Valencia</option>
+                        <option>Alicante</option>
+                        <option>Islas Baleares</option>
+                        <option>Bizkaia</option>
+                        <option>Gipuzkoa</option>
+                        <option>Araba</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label for="tipoInput" class="form-label">Tipo</label>
-                    <select class="form-select" id="tipoInput">
+                    <select class="form-select" id="tipoInput" formControlName="type">
                       <option>Cualquiera</option>
                       <option>Hospital</option>
                       <option>Centro de salud</option>
@@ -27,7 +36,7 @@
                     </select>
                   </div>            
 
-                <button type="button" class="m-1 btn btn-dark">Buscar</button>
+                <button type="button" class="m-1 btn btn-dark" (click)="onSearch()" [disabled]="!searchForm.valid">Buscar</button>
                 <button type="reset" class="m-1 btn btn-outline-danger">Cancelar</button>
             </form>
         </div>     
