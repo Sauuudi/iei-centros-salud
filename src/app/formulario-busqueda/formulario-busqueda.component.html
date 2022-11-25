@@ -1,57 +1,96 @@
-<div class="container text-center ">
-    <div class="row p-3">
-        <p class="fs-1">Buscador de centros de salud</p>
-    </div>
-    <div class="row p-3 justify-content-center">   
-        <div class="container-md col col-4" > 
-            <form class="text-start" [formGroup]="searchForm">
-                <div class="mb-3">
-                    <label for="localidadInput" class="form-label">Localidad</label>
-                    <input type="text" class="form-control" id="localidadInput" placeholder="Cualquiera" formControlName="city">
-                </div>
-                <div class="mb-3">
-                    <label for="codigoPostalInput" class="form-label">Cod. Postal</label>
-                    <input type="text" class="form-control" id="codigoPostalInput" placeholder="Cualquiera" formControlName="postal">
-                </div>
-                <div class="mb-3">
-                    <label for="provinciaInput" class="form-label">Provincia</label>
-                    <select class="form-select" id="provinciaInput" formControlName="prov">
-                        <option>Cualquiera</option>
-                        <option>Castellón</option>
-                        <option>Valencia</option>
-                        <option>Alicante</option>
-                        <option>Islas Baleares</option>
-                        <option>Bizkaia</option>
-                        <option>Gipuzkoa</option>
-                        <option>Araba</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="tipoInput" class="form-label">Tipo</label>
-                    <select class="form-select" id="tipoInput" formControlName="type">
-                      <option>Cualquiera</option>
-                      <option>Hospital</option>
-                      <option>Centro de salud</option>
-                      <option>Otros</option>
-                    </select>
-                  </div>            
-
-                <button type="button" class="m-1 btn btn-dark" (click)="onSearch()" [disabled]="!searchForm.valid">Buscar</button>
-                <button type="reset" class="m-1 btn btn-outline-danger" (click)="onCancel()">Cancelar</button>
-            </form>
-        </div>     
-
-        <div class=" col col-6 mapa">            
-            <div id="map"></div>
-            <p>MAPA</p>
+<div class="container text-center">
+  <div class="row p-3">
+    <p class="fs-1">Buscador de centros de salud</p>
+  </div>
+  <div class="row p-3 justify-content-center">
+    <div class="container-md col col-4">
+      <form class="text-start" [formGroup]="searchForm">
+        <div class="mb-3">
+          <label for="localidadInput" class="form-label">Localidad</label>
+          <input
+            type="text"
+            class="form-control"
+            id="localidadInput"
+            placeholder="Cualquiera"
+            formControlName="city"
+          />
         </div>
-    </div>
-    <div class="row">
-        <div class="col p-3 text-start" >
-            <p class="fs-4">Resultados:</p>
-            <div class="container-fluid bg-secondary text-white py-1 overflow-auto" style="height: 200px; white-space:pre-wrap;">
-                {{resultados}}
-            </div>
+        <div class="mb-3">
+          <label for="codigoPostalInput" class="form-label">Cod. Postal</label>
+          <input
+            type="text"
+            class="form-control"
+            id="codigoPostalInput"
+            placeholder="Cualquiera"
+            formControlName="postal"
+          />
         </div>
+        <div class="mb-3">
+          <label for="provinciaInput" class="form-label">Provincia</label>
+          <select
+            class="form-select"
+            id="provinciaInput"
+            formControlName="prov"
+          >
+            <option>Cualquiera</option>
+            <option>Castellón</option>
+            <option>Valencia</option>
+            <option>Alicante</option>
+            <option>Islas Baleares</option>
+            <option>Bizkaia</option>
+            <option>Gipuzkoa</option>
+            <option>Araba</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="tipoInput" class="form-label">Tipo</label>
+          <select class="form-select" id="tipoInput" formControlName="type">
+            <option>Cualquiera</option>
+            <option>Hospital</option>
+            <option>Centro de salud</option>
+            <option>Otros</option>
+          </select>
+        </div>
+
+        <button
+          type="button"
+          class="m-1 btn btn-dark"
+          (click)="onSearch()"
+          [disabled]="!searchForm.valid"
+        >
+          Buscar
+        </button>
+        <button
+          type="reset"
+          class="m-1 btn btn-outline-danger"
+          (click)="onCancel()"
+        >
+          Cancelar
+        </button>
+      </form>
     </div>
+
+    <div class="col col-6 mapa">
+      <div id="map"></div>
+      <p>MAPA</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col p-3 text-start">
+      <p class="fs-4">Resultados:</p>
+      <div
+        class="container-fluid bg-secondary text-white py-1 overflow-auto"
+        style="height: 200px; white-space: pre-wrap"
+      >
+        {{ resultados }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  id="popup"
+  class="ol-popup"
+>
+  <p>El popup</p>
 </div>

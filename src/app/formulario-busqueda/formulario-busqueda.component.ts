@@ -7,15 +7,18 @@ import { MapService } from '../services/map.service';
   styleUrls: ['./formulario-busqueda.component.scss'],
 })
 export class FormularioBusquedaComponent implements OnInit {
+  
   searchForm!: FormGroup;
-  mapTarget?: HTMLElement;
+  mapTarget: HTMLElement;
+  popup: HTMLElement;
   resultados = '';
 
   constructor(private fb: FormBuilder, private map: MapService) {}
 
   ngOnInit() {
+    this.popup = document.getElementById('popup') as HTMLElement ;
     this.mapTarget = document.getElementById('map') as HTMLElement;
-    this.map.initializeMap(this.mapTarget);
+    this.map.initializeMap(this.mapTarget, this.popup);
     this.checkForm();
   }
 
@@ -32,9 +35,10 @@ export class FormularioBusquedaComponent implements OnInit {
     this.onCancel();
     const { city, postal, prov, type } = this.searchForm.value;
     //Añadir petición de búsqueda
-
     //depues de la pet mostrar los centros en resultados y en el mapa con marcadores
     this.map.createMarker(-0.375, 39.466667, 'hospital', 'hospital del centro');
+    this.map.createMarker(-0.38, 39.466667, 'hospital', 'hospital 2');
+    //new Centro(), add al array que mostraremoe en el ngFor del html en resultados
     this.resultados = 'los resultados \n';
   }
 

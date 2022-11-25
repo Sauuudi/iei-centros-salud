@@ -4,24 +4,27 @@ import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
 import VectorSource from 'ol/source/Vector';
-import { Feature } from 'ol';
+import { Feature, Overlay } from 'ol';
 import { Point } from 'ol/geom';
-import { fromLonLat, toLonLat } from 'ol/proj';
+import { fromLonLat } from 'ol/proj';
 import VectorLayer from 'ol/layer/Vector';
 import Style from 'ol/style/Style';
 import Icon from 'ol/style/Icon';
 import FullScreen from 'ol/control/FullScreen';
 
-const centerMap = { lon: -0.375, lat: 39.466667 };
+const DEFAULT_CENTER_MAP = { LON: -0.375, LAT: 39.466667 };
 
 @Injectable({
   providedIn: 'root',
 })
 export class MapService {
-  map?: Map;
+  map: Map;
   markerSource: VectorSource = new VectorSource();
+  popupOverlay: Overlay;
+  popupElement: HTMLElement;
 
-  initializeMap(target: HTMLElement) {
+  initializeMap(target: HTMLElement, popupRef: HTMLElement) {
+    this.popupElement = popupRef;
     this.createMap(target);
     this.initializeMakerListener();
   }
@@ -31,7 +34,7 @@ export class MapService {
       target,
       controls: [new FullScreen()],
       view: new View({
-        center: fromLonLat([centerMap.lon, centerMap.lat]),
+        center: fromLonLat([DEFAULT_CENTER_MAP.LON, DEFAULT_CENTER_MAP.LAT]),
         zoom: 13,
       }),
       layers: [
@@ -50,6 +53,16 @@ export class MapService {
           }),
         }),
       ],
+      overlays: [
+        (this.popupOverlay = new Overlay({
+          element: this.popupElement,
+          autoPan: {
+            animation: {
+              duration: 250,
+            },
+          },
+        })),
+      ],
     });
   }
 
@@ -63,16 +76,12 @@ export class MapService {
       );
 
       if (feature && feature.get('geometry') instanceof Point) {
-        let coordinate = evt.coordinate;
         let coordinatespointer = feature.get('geometry').flatCoordinates;
-
-        console.log(
-          '-- tenemos el marcador!!!, name del hospital: ' +
-            feature.get('hospital') +
-            '\n coordenadas del marcador:' +
-            toLonLat(coordinatespointer) +
-            '\n mejor usar las del marcador \n'
-        );
+        this.popupElement.style.visibility = 'visible';
+        this.popupOverlay.setPosition(coordinatespointer);
+        this.popupElement.innerHTML = feature.get('hospital'); // aqui la info del hospital
+      } else {
+        this.popupElement.style.visibility = 'hidden';
       }
     });
   }
@@ -83,7 +92,7 @@ export class MapService {
     this.markerSource.addFeature(marker);
   }
 
-  clearMarkers(){
+  clearMarkers() {
     this.markerSource.clear();
   }
 }
