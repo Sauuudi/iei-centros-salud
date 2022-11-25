@@ -77,11 +77,13 @@ export class MapService {
 
       if (feature && feature.get('geometry') instanceof Point) {
         let coordinatespointer = feature.get('geometry').flatCoordinates;
-        this.popupElement.style.visibility = 'visible';
+
         this.popupOverlay.setPosition(coordinatespointer);
-        this.popupElement.innerHTML = feature.get('hospital'); // aqui la info del hospital
+
+        this.popupElement.style.display = 'block';
+        document.getElementById('popup-message').innerHTML = feature.get('hospital'); // aqui la info del hospital
       } else {
-        this.popupElement.style.visibility = 'hidden';
+        this.popupElement.style.display = 'none';
       }
     });
   }

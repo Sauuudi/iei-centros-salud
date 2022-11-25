@@ -26,14 +26,16 @@ export class FormularioBusquedaComponent implements OnInit {
     this.searchForm = this.fb.group({
       city: [''],
       postal: ['', Validators.pattern('[0-9]{5}')],
-      prov: ['Cualquiera'],
+      provincia: ['Cualquiera'],
       type: ['Cualquiera'],
     });
   }
 
   onSearch() {
     this.onCancel();
-    const { city, postal, prov, type } = this.searchForm.value;
+    const busqueda : { city, postal, provincia, type } = this.searchForm.value;
+    console.log(busqueda);
+    
     //Añadir petición de búsqueda
     //depues de la pet mostrar los centros en resultados y en el mapa con marcadores
     this.map.createMarker(-0.375, 39.466667, 'hospital', 'hospital del centro');
