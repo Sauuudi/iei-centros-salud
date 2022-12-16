@@ -1,0 +1,50 @@
+[
+  {
+    "nombre": "Hospital Juanito",
+    "tipo": "hospital",
+    "direccion": "a",
+    "cod_postal": "b",
+    "longitud": "-0.39",
+    "latitud": "39.466667",
+    "telefono": "string",
+    "descripcion": "string",
+    "localidad": "Localidad",
+    "provincia": "Provincia"
+  },
+  {
+    "nombre": "Hospital Pedrito",
+    "tipo": "hospital",
+    "direccion": "a",
+    "cod_postal": "b",
+    "longitud": "-0.37",
+    "latitud": "39.466667",
+    "telefono": "string",
+    "descripcion": "string",
+    "localidad": "Localidad",
+    "provincia": "Provincia"
+  },
+  {
+    "nombre": "Hospital Luisin",
+    "tipo": "hospital",
+    "direccion": "a",
+    "cod_postal": "b",
+    "longitud": "-0.40",
+    "latitud": "39.466667",
+    "telefono": "string",
+    "descripcion": "string",
+    "localidad": "Localidad",
+    "provincia": "Provincia"
+  },
+  {
+    "nombre": "Hospital Norberto",
+    "tipo": "hospital",
+    "direccion": "a",
+    "cod_postal": "b",
+    "longitud": "-0.36",
+    "latitud": "39.466667",
+    "telefono": "string",
+    "descripcion": "string",
+    "localidad": "Localidad",
+    "provincia": "Provincia"
+  }
+]
