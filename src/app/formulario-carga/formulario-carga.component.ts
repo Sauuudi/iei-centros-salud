@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import data from '../data/data.json'
 
 @Component({
   selector: 'app-formulario-carga',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./formulario-carga.component.scss']
 })
 export class FormularioCargaComponent implements OnInit {
+
+  centros = data;
+
 
   constructor() { }
 
