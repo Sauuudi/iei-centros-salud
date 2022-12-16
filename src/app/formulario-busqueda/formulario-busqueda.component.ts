@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { map } from 'rxjs';
 import { FormularioCargaComponent } from '../formulario-carga/formulario-carga.component';
 import { MapService } from '../services/map.service';
 import { Establecimiento } from '../shared/centro-model.model';
@@ -13,12 +12,13 @@ export class FormularioBusquedaComponent implements OnInit {
   searchForm: FormGroup;
   mapTarget: HTMLElement;
   popup: HTMLElement;
+  establecimientos: any;
   resultados: string[]; //debe ser Establecimientos[]
 
   constructor(
     private formBuilder: FormBuilder,
     private map: MapService,
-    private centros: FormularioCargaComponent
+    private formularioCarga: FormularioCargaComponent
   ) {}
 
   ngOnInit() {
@@ -38,20 +38,22 @@ export class FormularioBusquedaComponent implements OnInit {
   }
 
   onSearch() {
-    this.onCancel();
     const busqueda: { city; postalCode; provincia; type } = this.searchForm.value;
+    this.map.clearMarkers();
+    this.resultados = [];
+
     console.log(busqueda);
-    // this.resultados += `Resultado de la búsqueda para -->
-    //  tipo: ${busqueda.type},
-    //  ciudad: ${busqueda.city},
-    //  CP: ${busqueda.postalCode},
-    //  provincia: ${busqueda.provincia}\n`;
-     
-     const centros = this.centros.centros;
+
+    this.establecimientos = this.formularioCarga.centros
+    // this.centros.getCentros().subscribe((res) => {
+    //   console.log("----------" ,res);
+      
+    //   this.establecimientos = res;
+    // });
     
     //Añadir petición de búsqueda
     //depues de la pet mostrar los centros en resultados y en el mapa con marcadores
-    this.filterCentros(centros, busqueda).forEach((res) => {
+    this.filterCentros(this.establecimientos, busqueda).forEach((res) => {
       this.map.createMarker(
         <number>(<unknown>res.longitud),
         <number>(<unknown>res.latitud),
@@ -68,6 +70,10 @@ export class FormularioBusquedaComponent implements OnInit {
   onCancel() {
     this.map.clearMarkers();
     this.resultados = [''];
+    this.resetFormValues();
+  }
+
+  private resetFormValues() {
     this.searchForm.patchValue(
       {
         city: '',
@@ -75,16 +81,16 @@ export class FormularioBusquedaComponent implements OnInit {
         provincia: 'Cualquiera',
         type: 'Cualquiera',
       }
-    );
-    
+    )
   }
 
   private filterCentros(centros, busqueda) {
+    
     return centros.filter((centro) => {      
-      return (busqueda.provincia == 'Cualquiera' || centro.provincia.includes(busqueda.provincia)) &&
-      (busqueda.type == 'Cualquiera' || centro.tipo == busqueda.type) && 
+      return (busqueda.provincia == 'Cualquiera' || centro.provincia.toLowerCase().includes(busqueda.provincia.toLowerCase())) &&
+      (busqueda.type == 'Cualquiera' || centro.tipo.toLowerCase() == busqueda.type.toLowerCase()) && 
       (busqueda.postalCode == '' || centro.cod_postal == busqueda.postalCode) && 
-      (busqueda.city == '' || centro.localidad.includes(busqueda.city.toLowerCase()));
+      (busqueda.city == '' || centro.localidad.toLowerCase().includes(busqueda.city.toLowerCase()));
     });
   }
 }

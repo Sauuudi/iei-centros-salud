@@ -48,7 +48,7 @@ export class MapService {
           style: new Style({
             image: new Icon({
               anchor: [0.5, 1],
-              src: 'assets/marker.png',
+              src: 'assets/blue_marker.png',
             }),
           }),
         }),
@@ -81,7 +81,7 @@ export class MapService {
         this.popupOverlay.setPosition(coordinatespointer);
 
         this.popupElement.style.display = 'block';
-        document.getElementById('popup-message').innerHTML = feature.get('hospital'); // aqui la info del hospital
+        this.popupElement.innerHTML = feature.get('hospital'); // aqui la info del hospital
       } else {
         this.popupElement.style.display = 'none';
       }

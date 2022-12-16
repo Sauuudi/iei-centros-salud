@@ -7,6 +7,7 @@ import { FormularioCargaComponent } from './formulario-carga/formulario-carga.co
 import { FormularioBusquedaComponent } from './formulario-busqueda/formulario-busqueda.component';
 import { HeaderComponent } from './header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import {  HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [FormularioCargaComponent],
   bootstrap: [AppComponent]
