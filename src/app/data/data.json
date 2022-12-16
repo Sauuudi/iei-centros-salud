@@ -9,7 +9,7 @@
     "telefono": "string",
     "descripcion": "string",
     "localidad": "Valencia",
-    "provincia": "Provincia"
+    "provincia": "Valencia"
   },
   {
     "nombre": "Hospital Pedrito",
@@ -21,7 +21,7 @@
     "telefono": "string",
     "descripcion": "string",
     "localidad": "Valencia",
-    "provincia": "Provincia"
+    "provincia": "Valencia"
   },
   {
     "nombre": "Hospital Luisin",
@@ -33,7 +33,7 @@
     "telefono": "string",
     "descripcion": "string",
     "localidad": "valencia",
-    "provincia": "Provincia"
+    "provincia": "Valencia"
   },
   {
     "nombre": "Hospital Norberto",
@@ -45,7 +45,7 @@
     "telefono": "string",
     "descripcion": "string",
     "localidad": "Torrent",
-    "provincia": "Provincia"
+    "provincia": "Valencia"
   },
   {
     "nombre": "Centro de salud Eulaliito",
@@ -57,7 +57,7 @@
     "telefono": "string",
     "descripcion": "string",
     "localidad": "Benimamet",
-    "provincia": "Provincia"
+    "provincia": "Valencia"
   },
   {
     "nombre": "Centro de salud Manolin",
@@ -69,7 +69,7 @@
     "telefono": "string",
     "descripcion": "string",
     "localidad": "Benimaclet",
-    "provincia": "Provincia"
+    "provincia": "Valencia"
   },
   {
     "nombre": "Dispensario Eduardo",
@@ -87,7 +87,7 @@
     "nombre": "Hospital Carlos",
     "tipo": "hospital",
     "direccion": "a",
-    "cod_postal": "b",
+    "cod_postal": "12345",
     "longitud": "-0.36",
     "latitud": "39.466667",
     "telefono": "string",

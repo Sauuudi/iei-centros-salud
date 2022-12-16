@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { map } from 'rxjs';
 import { FormularioCargaComponent } from '../formulario-carga/formulario-carga.component';
 import { MapService } from '../services/map.service';
+import { Establecimiento } from '../shared/centro-model.model';
 @Component({
   selector: 'app-formulario-busqueda',
   templateUrl: './formulario-busqueda.component.html',
   styleUrls: ['./formulario-busqueda.component.scss'],
 })
 export class FormularioBusquedaComponent implements OnInit {
-  searchForm!: FormGroup;
+  searchForm: FormGroup;
   mapTarget: HTMLElement;
   popup: HTMLElement;
-  resultados = '';
+  resultados: string[]; //debe ser Establecimientos[]
 
   constructor(
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private map: MapService,
     private centros: FormularioCargaComponent
   ) {}
@@ -27,9 +29,9 @@ export class FormularioBusquedaComponent implements OnInit {
   }
 
   checkForm() {
-    this.searchForm = this.fb.group({
+    this.searchForm = this.formBuilder.group({
       city: [''],
-      postal: ['', Validators.pattern('[0-9]{5}')],
+      postalCode: ['', Validators.pattern('[0-9]{5}')],
       provincia: ['Cualquiera'],
       type: ['Cualquiera'],
     });
@@ -37,54 +39,52 @@ export class FormularioBusquedaComponent implements OnInit {
 
   onSearch() {
     this.onCancel();
-    const busqueda: { city; postal; provincia; type } = this.searchForm.value;
-    // console.log(busqueda);
-    this.resultados += `Resultado de la búsqueda para tipo: ${busqueda.type}, ciudad: ${busqueda.city}, CP: ${busqueda.postal}, provincia: ${busqueda.provincia}\n`;
-
-    let est = this.centros.centros;
-    if (busqueda.type != 'Cualquiera') {
-      console.log(est)
-      est = est.filter((el) => {
-        console.log('Filtro tipo',  el.tipo.toLowerCase() === busqueda.type.toLowerCase())
-        el.tipo.toLowerCase() === busqueda.type.toLowerCase();
-      });
-      console.log(est)
-    }
-    if (busqueda.city != '') {
-      est = est.filter((el) => {
-        console.log('Filtro ciudad')
-        el.localidad.toLowerCase() !== busqueda.city.toLowerCase();
-      });
-    }
-    if (busqueda.postal != '') {
-      est = est.filter((el) => {
-        console.log('Filtro CP')
-        el.cod_postal === busqueda.postal;
-        console.log(el.cod_postal === busqueda.postal)
-      });
-    }
-    if (busqueda.provincia != 'Cualquiera') {
-      console.log('Filtro provincia')
-      est = est.filter((el) => {
-        el.provincia.toLowerCase() !== busqueda.provincia.toLowerCase();
-      });
-    }
+    const busqueda: { city; postalCode; provincia; type } = this.searchForm.value;
+    console.log(busqueda);
+    // this.resultados += `Resultado de la búsqueda para -->
+    //  tipo: ${busqueda.type},
+    //  ciudad: ${busqueda.city},
+    //  CP: ${busqueda.postalCode},
+    //  provincia: ${busqueda.provincia}\n`;
+     
+     const centros = this.centros.centros;
+    
     //Añadir petición de búsqueda
     //depues de la pet mostrar los centros en resultados y en el mapa con marcadores
-    est.forEach((el) => {
+    this.filterCentros(centros, busqueda).forEach((res) => {
       this.map.createMarker(
-        <number>(<unknown>el.longitud),
-        <number>(<unknown>el.latitud),
-        el.tipo,
-        el.nombre
+        <number>(<unknown>res.longitud),
+        <number>(<unknown>res.latitud),
+        res.tipo,
+        res.nombre
       );
-      this.resultados += `${el.nombre}, ${el.cod_postal}, ${el.localidad}, ${el.descripcion}, ${el.direccion}, ${el.telefono}, ${el.tipo}\n`;
+      //new Centro(), add al array que mostraremoe en el ngFor del html en resultados
+      this.resultados.push(
+        `${res.nombre}, ${res.cod_postal}, ${res.localidad}, ${res.descripcion}, ${res.direccion}, ${res.telefono}, ${res.tipo}\n`
+      )
     });
-    //new Centro(), add al array que mostraremoe en el ngFor del html en resultados
   }
 
   onCancel() {
     this.map.clearMarkers();
-    this.resultados = '';
+    this.resultados = [''];
+    this.searchForm.patchValue(
+      {
+        city: '',
+        postalCode: '',
+        provincia: 'Cualquiera',
+        type: 'Cualquiera',
+      }
+    );
+    
+  }
+
+  private filterCentros(centros, busqueda) {
+    return centros.filter((centro) => {      
+      return (busqueda.provincia == 'Cualquiera' || centro.provincia.includes(busqueda.provincia)) &&
+      (busqueda.type == 'Cualquiera' || centro.tipo == busqueda.type) && 
+      (busqueda.postalCode == '' || centro.cod_postal == busqueda.postalCode) && 
+      (busqueda.city == '' || centro.localidad.includes(busqueda.city.toLowerCase()));
+    });
   }
 }

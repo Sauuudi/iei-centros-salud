@@ -22,7 +22,7 @@
             class="form-control"
             id="codigoPostalInput"
             placeholder="Cualquiera"
-            formControlName="postal"
+            formControlName="postalCode"
           />
         </div>
         <div class="mb-3">
@@ -61,7 +61,6 @@
           Buscar
         </button>
         <button
-          type="reset"
           class="m-1 btn btn-outline-danger"
           (click)="onCancel()"
         >
@@ -81,9 +80,16 @@
       <div
         class="container-fluid bg-secondary text-white py-1 overflow-auto"
         style="height: 200px; white-space: pre-wrap"
-      >
-        {{ resultados }}
+      > 
+      <!-- mover esto al css -->
+      <div style="color: yellow;">
+        Resultado de la búsqueda:
       </div>
+      <div *ngFor="let resultado of resultados">
+        <!-- make it seleccionable y que cuando se pulse se marque en el mapa -->
+        <p *ngIf="resultado.length" >{{resultado}}</p>
+      </div>
+    </div>
     </div>
   </div>
 </div>
