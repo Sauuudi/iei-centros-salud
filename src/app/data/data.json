@@ -3,29 +3,77 @@
     "nombre": "Hospital Juanito",
     "tipo": "hospital",
     "direccion": "a",
-    "cod_postal": "b",
+    "cod_postal": "46009",
     "longitud": "-0.39",
     "latitud": "39.466667",
     "telefono": "string",
     "descripcion": "string",
-    "localidad": "Localidad",
+    "localidad": "Valencia",
     "provincia": "Provincia"
   },
   {
     "nombre": "Hospital Pedrito",
     "tipo": "hospital",
     "direccion": "a",
-    "cod_postal": "b",
+    "cod_postal": "46009",
     "longitud": "-0.37",
     "latitud": "39.466667",
     "telefono": "string",
     "descripcion": "string",
-    "localidad": "Localidad",
+    "localidad": "Valencia",
     "provincia": "Provincia"
   },
   {
     "nombre": "Hospital Luisin",
     "tipo": "hospital",
+    "direccion": "a",
+    "cod_postal": "46009",
+    "longitud": "-0.40",
+    "latitud": "39.466667",
+    "telefono": "string",
+    "descripcion": "string",
+    "localidad": "valencia",
+    "provincia": "Provincia"
+  },
+  {
+    "nombre": "Hospital Norberto",
+    "tipo": "hospital",
+    "direccion": "a",
+    "cod_postal": "46010",
+    "longitud": "-0.36",
+    "latitud": "39.466667",
+    "telefono": "string",
+    "descripcion": "string",
+    "localidad": "Torrent",
+    "provincia": "Provincia"
+  },
+  {
+    "nombre": "Centro de salud Eulaliito",
+    "tipo": "Centro de salud",
+    "direccion": "a",
+    "cod_postal": "46010",
+    "longitud": "-0.40",
+    "latitud": "39.466667",
+    "telefono": "string",
+    "descripcion": "string",
+    "localidad": "Benimamet",
+    "provincia": "Provincia"
+  },
+  {
+    "nombre": "Centro de salud Manolin",
+    "tipo": "Centro de salud",
+    "direccion": "a",
+    "cod_postal": "46010",
+    "longitud": "-0.36",
+    "latitud": "39.466667",
+    "telefono": "string",
+    "descripcion": "string",
+    "localidad": "Benimaclet",
+    "provincia": "Provincia"
+  },
+  {
+    "nombre": "Dispensario Eduardo",
+    "tipo": "Otros",
     "direccion": "a",
     "cod_postal": "b",
     "longitud": "-0.40",
@@ -33,10 +81,10 @@
     "telefono": "string",
     "descripcion": "string",
     "localidad": "Localidad",
-    "provincia": "Provincia"
+    "provincia": "Alicante"
   },
   {
-    "nombre": "Hospital Norberto",
+    "nombre": "Hospital Carlos",
     "tipo": "hospital",
     "direccion": "a",
     "cod_postal": "b",
@@ -45,6 +93,6 @@
     "telefono": "string",
     "descripcion": "string",
     "localidad": "Localidad",
-    "provincia": "Provincia"
+    "provincia": "Castellón"
   }
 ]

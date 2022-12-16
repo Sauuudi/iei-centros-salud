@@ -43,21 +43,28 @@ export class FormularioBusquedaComponent implements OnInit {
 
     let est = this.centros.centros;
     if (busqueda.type != 'Cualquiera') {
+      console.log(est)
       est = est.filter((el) => {
-        el.tipo.toLowerCase() !== busqueda.type.toLowerCase();
+        console.log('Filtro tipo',  el.tipo.toLowerCase() === busqueda.type.toLowerCase())
+        el.tipo.toLowerCase() === busqueda.type.toLowerCase();
       });
+      console.log(est)
     }
     if (busqueda.city != '') {
       est = est.filter((el) => {
+        console.log('Filtro ciudad')
         el.localidad.toLowerCase() !== busqueda.city.toLowerCase();
       });
     }
     if (busqueda.postal != '') {
       est = est.filter((el) => {
-        el.cod_postal.toLowerCase() !== busqueda.postal.toLowerCase();
+        console.log('Filtro CP')
+        el.cod_postal === busqueda.postal;
+        console.log(el.cod_postal === busqueda.postal)
       });
     }
     if (busqueda.provincia != 'Cualquiera') {
+      console.log('Filtro provincia')
       est = est.filter((el) => {
         el.provincia.toLowerCase() !== busqueda.provincia.toLowerCase();
       });
@@ -71,7 +78,7 @@ export class FormularioBusquedaComponent implements OnInit {
         el.tipo,
         el.nombre
       );
-      this.resultados += `${el.nombre}, ${el.cod_postal}, ${el.descripcion}, ${el.direccion}, ${el.telefono}, ${el.tipo}\n`;
+      this.resultados += `${el.nombre}, ${el.cod_postal}, ${el.localidad}, ${el.descripcion}, ${el.direccion}, ${el.telefono}, ${el.tipo}\n`;
     });
     //new Centro(), add al array que mostraremoe en el ngFor del html en resultados
   }
