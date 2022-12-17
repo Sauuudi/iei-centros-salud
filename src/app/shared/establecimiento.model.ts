@@ -7,14 +7,8 @@ export class Establecimiento {
     latitud: string;
     telefono: string;
     descripcion: string;
-    localidad: Localidad;
-    provincia: Provincia;
-}
-export class Localidad {
-  codigo: string;
-  nombre: string;
-}
-export class Provincia {
-  codigo: string;
-  nombre: string;
+    localidad: string;
+    localidad_codigo: string;
+    provincia: string;
+    provincia_codigo: string;
 }

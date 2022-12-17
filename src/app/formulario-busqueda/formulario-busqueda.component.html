@@ -69,26 +69,22 @@
     </div>
 
     <div class="col col-6 mapa">
-      <div id="map"></div>
+      <div id="map" class="map"></div>
       <p>MAPA</p>
     </div>
   </div>
   <div class="row">
-    <div class="col p-3 text-start">
+    <div class="resultados col p-3 text-start">
       <p class="fs-4">Resultados:</p>
-      <div
-        class="container-fluid bg-secondary text-white py-1 overflow-auto"
-        style="height: 200px; white-space: pre-wrap"
-      > 
-      <!-- mover esto al css -->
-      <div style="color: yellow;">
-        Resultado de la búsqueda:
+      <div class="resultados__container container-fluid bg-secondary text-white py-1 overflow-auto"> 
+        <div class="resultados__title">
+          Resultado de la búsqueda:
+        </div>
+        <div class="resultados__content" *ngFor="let establecimiento of resultados">
+          <!-- make it seleccionable y que cuando se pulse se marque en el mapa -->
+          <p>-{{establecimiento.nombre}}</p>
+        </div>
       </div>
-      <div *ngFor="let resultado of resultados">
-        <!-- make it seleccionable y que cuando se pulse se marque en el mapa -->
-        <p *ngIf="resultado.length" >{{resultado}}</p>
-      </div>
-    </div>
     </div>
   </div>
 </div>

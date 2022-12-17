@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { FormularioCargaComponent } from '../formulario-carga/formulario-carga.component';
 import { MapService } from '../services/map.service';
-import { Establecimiento } from '../shared/centro-model.model';
+import { Establecimiento } from '../shared/establecimiento.model';
 @Component({
   selector: 'app-formulario-busqueda',
   templateUrl: './formulario-busqueda.component.html',
@@ -13,7 +13,7 @@ export class FormularioBusquedaComponent implements OnInit {
   mapTarget: HTMLElement;
   popup: HTMLElement;
   establecimientos: any;
-  resultados: string[]; //debe ser Establecimientos[]
+  resultados: Establecimiento[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -52,24 +52,24 @@ export class FormularioBusquedaComponent implements OnInit {
     // });
     
     //Añadir petición de búsqueda
+
+
+
     //depues de la pet mostrar los centros en resultados y en el mapa con marcadores
-    this.filterCentros(this.establecimientos, busqueda).forEach((res) => {
+    //y poner el mapa con el zoom en toda españa
+    this.filterCentros(this.establecimientos, busqueda).forEach((filteredCentro: Establecimiento) => {
       this.map.createMarker(
-        <number>(<unknown>res.longitud),
-        <number>(<unknown>res.latitud),
-        res.tipo,
-        res.nombre
+        <number>(<unknown>filteredCentro.longitud),
+        <number>(<unknown>filteredCentro.latitud),
+        filteredCentro
       );
-      //new Centro(), add al array que mostraremoe en el ngFor del html en resultados
-      this.resultados.push(
-        `${res.nombre}, ${res.cod_postal}, ${res.localidad}, ${res.descripcion}, ${res.direccion}, ${res.telefono}, ${res.tipo}\n`
-      )
+      this.resultados.push(filteredCentro)
     });
   }
 
   onCancel() {
     this.map.clearMarkers();
-    this.resultados = [''];
+    this.resultados = [];
     this.resetFormValues();
   }
 
@@ -84,7 +84,7 @@ export class FormularioBusquedaComponent implements OnInit {
     )
   }
 
-  private filterCentros(centros, busqueda) {
+  private filterCentros(centros: Establecimiento[], busqueda) {
     
     return centros.filter((centro) => {      
       return (busqueda.provincia == 'Cualquiera' || centro.provincia.toLowerCase().includes(busqueda.provincia.toLowerCase())) &&

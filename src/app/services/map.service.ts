@@ -11,6 +11,7 @@ import VectorLayer from 'ol/layer/Vector';
 import Style from 'ol/style/Style';
 import Icon from 'ol/style/Icon';
 import FullScreen from 'ol/control/FullScreen';
+import { Establecimiento } from '../shared/establecimiento.model';
 
 const DEFAULT_CENTER_MAP = { LON: -0.375, LAT: 39.466667 };
 
@@ -19,12 +20,21 @@ const DEFAULT_CENTER_MAP = { LON: -0.375, LAT: 39.466667 };
 })
 export class MapService {
   map: Map;
-  markerSource: VectorSource = new VectorSource();
+  markerSource: VectorSource;
   popupOverlay: Overlay;
   popupElement: HTMLElement;
 
   initializeMap(target: HTMLElement, popupRef: HTMLElement) {
     this.popupElement = popupRef;
+    this.markerSource = new VectorSource();
+    this.popupOverlay = new Overlay({
+      element: this.popupElement,
+      autoPan: {
+        animation: {
+          duration: 250,
+        },
+      },
+    })
     this.createMap(target);
     this.initializeMakerListener();
   }
@@ -53,44 +63,41 @@ export class MapService {
           }),
         }),
       ],
-      overlays: [
-        (this.popupOverlay = new Overlay({
-          element: this.popupElement,
-          autoPan: {
-            animation: {
-              duration: 250,
-            },
-          },
-        })),
-      ],
+      overlays: [this.popupOverlay],
     });
   }
 
   private initializeMakerListener() {
     this.map?.on('click', (evt) => {
-      let feature = this.map?.forEachFeatureAtPixel(
-        evt.pixel,
-        function (feat: any, layer: any) {
+      const feature = this.map?.forEachFeatureAtPixel(evt.pixel, function (feat: any, layer: any) {
           return feat;
         }
       );
 
       if (feature && feature.get('geometry') instanceof Point) {
-        let coordinatespointer = feature.get('geometry').flatCoordinates;
+        const coordinatesPointer = feature.get('geometry').flatCoordinates;
+        const establecimientoPopupData = feature.get('establecimientoPopupData');        
 
-        this.popupOverlay.setPosition(coordinatespointer);
+        this.popupOverlay.setPosition(coordinatesPointer);
 
-        this.popupElement.style.display = 'block';
-        this.popupElement.innerHTML = feature.get('hospital'); // aqui la info del hospital
+        this.popupElement.style.visibility = 'visible';
+        document.getElementById('popup-title').innerHTML = establecimientoPopupData.nombre;
+        document.getElementById('popup-message').innerHTML = establecimientoPopupData.descripcion
       } else {
-        this.popupElement.style.display = 'none';
+        this.popupElement.style.visibility = 'hidden';
       }
     });
   }
 
-  createMarker(lon: number, lat: number, key: string, value: string) {
-    let marker = new Feature(new Point(fromLonLat([lon, lat])));
-    marker.set(key, value);
+  createMarker(lon: number, lat: number, establecimiento: Establecimiento) {
+    const marker = new Feature(new Point(fromLonLat([lon, lat])));    
+    marker.set('establecimientoPopupData', 
+      {
+        //pasarle mas info si queremos
+        nombre: establecimiento.nombre,
+        descripcion: establecimiento.descripcion
+      }
+    ); 
     this.markerSource.addFeature(marker);
   }
 
