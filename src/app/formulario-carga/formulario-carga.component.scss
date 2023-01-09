@@ -1,0 +1,15 @@
+.check{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.buttons{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+}
+.btn{
+    margin: 2px;
+    max-width: fit-content;
+    min-width: 87px;
+}
