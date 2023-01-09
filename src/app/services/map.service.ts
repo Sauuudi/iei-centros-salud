@@ -24,6 +24,8 @@ export class MapService {
   popupOverlay: Overlay;
   popupElement: HTMLElement;
 
+  //Para inicializar el mapa, hemos de crear tanto el mapa como los marcadores y popup, así como el listener que nos permitirá ver
+  //qué marcador ha sido pulsado para hacer aparecer el popup con los datos correspondientes
   initializeMap(target: HTMLElement, popupRef: HTMLElement) {
     this.popupElement = popupRef;
     this.markerSource = new VectorSource();
@@ -67,6 +69,7 @@ export class MapService {
     });
   }
 
+  //Creamos el listener para saber cuándo se hace click sobre cualquier marcador
   private initializeMakerListener() {
     this.map?.on('click', (evt) => {
       const feature = this.map?.forEachFeatureAtPixel(evt.pixel, function (feat: any, layer: any) {
@@ -89,11 +92,11 @@ export class MapService {
     });
   }
 
+  //Creamos los marcadores y los añadimos
   createMarker(lon: number, lat: number, establecimiento: Establecimiento) {
     const marker = new Feature(new Point(fromLonLat([lon, lat])));    
     marker.set('establecimientoPopupData', 
       {
-        //pasarle mas info si queremos
         nombre: establecimiento.nombre,
         descripcion: establecimiento.descripcion
       }
@@ -101,6 +104,7 @@ export class MapService {
     this.markerSource.addFeature(marker);
   }
 
+  //Borramos todos los marcadores
   clearMarkers() {
     this.markerSource.clear();
   }

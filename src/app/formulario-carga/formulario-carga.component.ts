@@ -12,6 +12,7 @@ export class FormularioCargaComponent {
   centros = data;
   resultados = []
 
+  //al buscar, hemos de comprobar qué checkbox están marcadas y, con ellas, realizar las peticiones al back para cargar esos datos al warehouse
   onSearch(){
     const all = document.querySelector('#all') as HTMLInputElement
     const baleares = document.querySelector('#baleares') as HTMLInputElement
@@ -25,10 +26,12 @@ export class FormularioCargaComponent {
     this.resultados.push('Error 1')
   }
 
+
   onCancel(){
     this.resultados = []
   }
 
+  //Con este método, borramos los datos almacenados en el warehouse
   onClear(){
 
   }

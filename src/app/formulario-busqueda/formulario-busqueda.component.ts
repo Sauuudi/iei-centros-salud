@@ -21,6 +21,7 @@ export class FormularioBusquedaComponent implements OnInit {
     private formularioCarga: FormularioCargaComponent
   ) {}
 
+  //Al iniciar el componente hemos de inicializar el mapa y el validador del form
   ngOnInit() {
     this.popup = document.getElementById('popup') as HTMLElement;
     this.mapTarget = document.getElementById('map') as HTMLElement;
@@ -29,6 +30,7 @@ export class FormularioBusquedaComponent implements OnInit {
     this.checkForm();
   }
 
+  //Este método obliga a, para poder buscar, que los datos introducidos sigan el siguiente formato
   checkForm() {
     this.searchForm = this.formBuilder.group({
       city: [''],
@@ -38,7 +40,9 @@ export class FormularioBusquedaComponent implements OnInit {
     });
   }
 
+  //Cargamos los marcadores que deben estar al inicio (es decir, todos)
   initialMarkers(){
+    //Lo hemos de cambiar por una petición que nos los devuelva todos
     this.establecimientos = this.formularioCarga.centros
 
     this.establecimientos.forEach((filteredCentro: Establecimiento) => {
@@ -50,6 +54,9 @@ export class FormularioBusquedaComponent implements OnInit {
     })
   }
 
+  //En este método vamos a gestionar lo que haremos cuando pulsamos el botón de búsqueda.
+  //Para ello, nos guardaremos los valores del form, haremos peticiones a la api y, una vez tengamos la lista filtrada,
+  //crearemos un marcador para cada uno de los establecimientos resultado y pushearemos los datos obtenidos al cuadro de texto
   onSearch() {
     const busqueda: { city; postalCode; provincia; type } = this.searchForm.value;
     this.map.clearMarkers();
@@ -57,6 +64,8 @@ export class FormularioBusquedaComponent implements OnInit {
 
     this.establecimientos = this.formularioCarga.centros
 
+    //En este bucle lo que vamos a hacer es recorrer el objeto búsqueda (con los valores del form) y realizar una petición a la API
+    //para aquellos valores del form que sean distintos a los por defecto, para así poder filtrar los resultados
     Object.entries(busqueda).forEach(entry => {
       const [key, value] = entry;
       if(value !== '' && value !== 'Cualquiera'){
@@ -85,6 +94,7 @@ export class FormularioBusquedaComponent implements OnInit {
     });
   }
 
+  //Al pulsar el botón cancelar, volveremos al estado inicial de la página (tanto el form, como los resultados y marcadores)
   onCancel() {
     this.map.clearMarkers();
     this.initialMarkers()
@@ -92,6 +102,7 @@ export class FormularioBusquedaComponent implements OnInit {
     this.resetFormValues();
   }
 
+  //Método para volver a los valores iniciales del form
   private resetFormValues() {
     this.searchForm.patchValue(
       {
