@@ -25,6 +25,7 @@ export class FormularioBusquedaComponent implements OnInit {
     this.popup = document.getElementById('popup') as HTMLElement;
     this.mapTarget = document.getElementById('map') as HTMLElement;
     this.map.initializeMap(this.mapTarget, this.popup);
+    this.initialMarkers()
     this.checkForm();
   }
 
@@ -37,21 +38,38 @@ export class FormularioBusquedaComponent implements OnInit {
     });
   }
 
+  initialMarkers(){
+    this.establecimientos = this.formularioCarga.centros
+
+    this.establecimientos.forEach((filteredCentro: Establecimiento) => {
+      this.map.createMarker(
+        <number>(<unknown>filteredCentro.longitud),
+        <number>(<unknown>filteredCentro.latitud),
+        filteredCentro
+      );
+    })
+  }
+
   onSearch() {
     const busqueda: { city; postalCode; provincia; type } = this.searchForm.value;
     this.map.clearMarkers();
     this.resultados = [];
 
-    console.log(busqueda);
-
     this.establecimientos = this.formularioCarga.centros
+
+    Object.entries(busqueda).forEach(entry => {
+      const [key, value] = entry;
+      if(value !== '' && value !== 'Cualquiera'){
+        //Hacer aquí la petición de búsqueda
+      }
+    });
+
     // this.centros.getCentros().subscribe((res) => {
     //   console.log("----------" ,res);
       
     //   this.establecimientos = res;
     // });
     
-    //Añadir petición de búsqueda
 
 
 
@@ -69,6 +87,7 @@ export class FormularioBusquedaComponent implements OnInit {
 
   onCancel() {
     this.map.clearMarkers();
+    this.initialMarkers()
     this.resultados = [];
     this.resetFormValues();
   }
@@ -87,10 +106,10 @@ export class FormularioBusquedaComponent implements OnInit {
   private filterCentros(centros: Establecimiento[], busqueda) {
     
     return centros.filter((centro) => {      
-      return (busqueda.provincia == 'Cualquiera' || centro.provincia.toLowerCase().includes(busqueda.provincia.toLowerCase())) &&
-      (busqueda.type == 'Cualquiera' || centro.tipo.toLowerCase() == busqueda.type.toLowerCase()) && 
-      (busqueda.postalCode == '' || centro.cod_postal == busqueda.postalCode) && 
-      (busqueda.city == '' || centro.localidad.toLowerCase().includes(busqueda.city.toLowerCase()));
+      return ((busqueda.provincia == 'Cualquiera' || centro.provincia.toLowerCase().includes(busqueda.provincia.toLowerCase())) &&
+      (busqueda.postalCode == '' || centro.cod_postal == busqueda.postalCode) &&
+      (busqueda.city == '' || centro.localidad.toLowerCase().includes(busqueda.city.toLowerCase()))) &&
+      (busqueda.type == 'Cualquiera' || centro.tipo.toLowerCase() == busqueda.type.toLowerCase()) ;
     });
   }
 }
