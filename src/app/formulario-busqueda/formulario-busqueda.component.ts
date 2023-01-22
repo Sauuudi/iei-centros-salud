@@ -75,10 +75,13 @@ export class FormularioBusquedaComponent implements OnInit {
   private getAllCentros(filters = {}) {
     this.centrosService.getAllCentros(filters).subscribe((centros: any) => {
       console.log(centros);
+      if(!centros.data.length) {
+        this.resultadosString.push('No hay datos que mostrar, intenta de cargar los datos a la base de datos');
+      }
       centros.data.forEach((centro) => {
         this.map.createMarker(
-          <number>(<unknown>centro.longitud),
-          <number>(<unknown>centro.latitud),
+          centro.longitud,
+          centro.latitud,
           centro.nombre, 
           centro.tipo
         );
@@ -88,17 +91,17 @@ export class FormularioBusquedaComponent implements OnInit {
   }
 
   private getFormattedCenter(centro: any) {
-    return `${centro.nombre}, ${centro.direccion} (${centro.en_localidad})`
+    return `${centro.nombre}, ${centro.direccion} (${centro.localidad.nombre})`
   }
 
   private buildSearchFilters(filtros: { localidad; postalCode; provincia; tipo }) {
     const tipo =  filtros.tipo === 'Cualquiera' ? '' : filtros.tipo;
-    const provincia =  filtros.provincia === 'Cualquiera' ? '' : filtros.tipo;
+    const provincia =  filtros.provincia === 'Cualquiera' ? '' : filtros.provincia;
     return { 
       tipo: tipo,
       codigo_postal: filtros.postalCode,
       en_localidad: filtros.localidad,
-      //provincia: provincia
+      en_provincia: provincia,
     }
   }
 }

@@ -97,7 +97,7 @@ export class MapService {
     marker.set('establecimientoPopupData', 
       {
         nombre: nombre,
-        tipo: tipo
+        tipo: 'Tipo: '+ tipo.toLowerCase()
       }
     ); 
     this.markerSource.addFeature(marker);

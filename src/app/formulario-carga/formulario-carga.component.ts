@@ -9,6 +9,7 @@ export class FormularioCargaComponent{
   resultadosV = '';
   resultadosB = '';
   resultadosE = '';
+  resultadoDelete = '';
 
   @ViewChild('baleares') balearesCheckBox: ElementRef;
   @ViewChild('valencia') valenciaCheckBox: ElementRef;
@@ -16,12 +17,12 @@ export class FormularioCargaComponent{
 
   constructor(private centrosServices: CentrosApiService) {}
 
-
   onSearch() {
     //Añadir consultas a la API dependiendo de si las constantes de arriba estan checked o no
-    this.resultadosV = 'Cargando datos de la Comunidad Valenciana';
-    this.resultadosB = 'Cargando datos de las Islas Baleares';
-    this.resultadosE = 'Cargando datos de Euskadi';
+    this.resultadosV = 'Cargando datos de la Comunidad Valenciana, espere un momento...';
+    this.resultadosB = 'Cargando datos de las Islas Baleares, espere un momento...';
+    this.resultadosE = 'Cargando datos de Euskadi, espere un momento...';
+    this.resultadoDelete = '';
 
     this.getSomeCenters({
       valencia: this.valenciaCheckBox.nativeElement.checked,
@@ -32,11 +33,17 @@ export class FormularioCargaComponent{
 
   //Con este método, borramos los datos almacenados en el warehouse
   onClear(){
-
+    this.centrosServices.deleteCentrosFromDB().subscribe( res => res , err => {       
+      if (err.status == 200) {
+        this.resultadoDelete = 'Centros Borrados de la BBDD'
+      } else {
+        this.resultadoDelete = 'Error en el borrado de datos de la BBDD'
+      }
+    })
   }
 
-  private getSomeCenters(comunidades: {valencia: boolean, baleares: boolean, euskadi: boolean}) {
-    if( comunidades.valencia ) {this.centrosServices.cargaValenciaCenters().subscribe( res => res , err => { 
+  private async getSomeCenters(comunidades: {valencia: boolean, baleares: boolean, euskadi: boolean}) {
+    if( comunidades.valencia ) { this.centrosServices.cargaValenciaCenters().subscribe( res => res , err => { 
       if (err.status == 200) {
         this.resultadosV = 'Datos de la Comunidad Valenciana cargados correctamente';
       } else {
@@ -46,7 +53,7 @@ export class FormularioCargaComponent{
       this.resultadosV = '';
     }
 
-    if( comunidades.baleares ) {this.centrosServices.cargaBalearesCenters().subscribe( res => res , err => { 
+    if( comunidades.baleares ) { this.centrosServices.cargaBalearesCenters().subscribe( res => res , err => { 
       if (err.status == 200) {
         this.resultadosB = 'Datos de las Islas Baleares cargados correctamente';
       }

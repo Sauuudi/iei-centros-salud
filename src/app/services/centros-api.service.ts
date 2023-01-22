@@ -50,4 +50,10 @@ export class CentrosApiService {
     headers.set('Access-Control-Allow-Origin', 'http://localhost:4200');
     return this.http.get('http://localhost:8080/cargaIslasBaleares', {headers, observe: 'response'});
   }
+
+  deleteCentrosFromDB() {
+    let headers = new HttpHeaders();
+    headers.set('Access-Control-Allow-Origin', 'http://localhost:4200');
+    return this.http.delete('http://localhost:8080/deleteAllCenters', {headers, observe: 'response'});
+  }
 }
