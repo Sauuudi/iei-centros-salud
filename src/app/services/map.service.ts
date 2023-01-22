@@ -13,7 +13,7 @@ import Icon from 'ol/style/Icon';
 import FullScreen from 'ol/control/FullScreen';
 import { Establecimiento } from '../shared/establecimiento.model';
 
-const DEFAULT_CENTER_MAP = { LON: -0.375, LAT: 39.466667 };
+const DEFAULT_CENTER_MAP = { LON:-3.7021501 , LAT:40.4176765};
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +47,7 @@ export class MapService {
       controls: [new FullScreen()],
       view: new View({
         center: fromLonLat([DEFAULT_CENTER_MAP.LON, DEFAULT_CENTER_MAP.LAT]),
-        zoom: 13,
+        zoom: 5.5,
       }),
       layers: [
         new TileLayer({
@@ -85,7 +85,7 @@ export class MapService {
 
         this.popupElement.style.visibility = 'visible';
         document.getElementById('popup-title').innerHTML = establecimientoPopupData.nombre;
-        document.getElementById('popup-message').innerHTML = establecimientoPopupData.descripcion
+        document.getElementById('popup-message').innerHTML = establecimientoPopupData.tipo
       } else {
         this.popupElement.style.visibility = 'hidden';
       }
@@ -93,12 +93,12 @@ export class MapService {
   }
 
   //Creamos los marcadores y los añadimos
-  createMarker(lon: number, lat: number, establecimiento: Establecimiento) {
+  createMarker(lon: number, lat: number, nombre: string, tipo: string) {
     const marker = new Feature(new Point(fromLonLat([lon, lat])));    
     marker.set('establecimientoPopupData', 
       {
-        nombre: establecimiento.nombre,
-        descripcion: establecimiento.descripcion
+        nombre: nombre,
+        tipo: tipo
       }
     ); 
     this.markerSource.addFeature(marker);
