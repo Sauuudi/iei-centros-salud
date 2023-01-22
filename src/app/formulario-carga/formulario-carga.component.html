@@ -8,34 +8,25 @@
     </div>
     <div class="container-md col check">
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="all" />
-        <label class="form-check-label" for="defaultCheck1">
-          Seleccionar todas
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="baleares" />
+        <input #baleares class="form-check-input" type="checkbox" id="baleares" />
         <label class="form-check-label" for="defaultCheck1">
           Illes Balears
         </label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="valencia" />
+        <input #valencia class="form-check-input" type="checkbox" id="valencia" />
         <label class="form-check-label" for="defaultCheck1">
           Comunitat Valenciana
         </label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="euskadi" />
+        <input #euskadi class="form-check-input" type="checkbox" id="euskadi" />
         <label class="form-check-label" for="defaultCheck1"> Euskadi </label>
       </div>
     </div>
   </div>
 
   <div class="row p-3 buttons">
-    <button type="button" class="btn btn-light" (click)="onCancel()">
-      Cancelar
-    </button>
     <button
       type="button"
       class="btn btn-sm btn-secondary btn-lg"
@@ -54,14 +45,10 @@
       <div
         class="resultados__container container-fluid bg-secondary text-white py-1 overflow-auto"
       >
-        <div class="resultados__title">Resultado de la búsqueda:</div>
-        <div
-          class="resultados__content"
-          *ngFor="let resultado of resultados"
-        >
-          <!-- make it seleccionable y que cuando se pulse se marque en el mapa -->
-          <p>-{{ resultado }}</p>
-        </div>
+        <div class="resultados__title">- Resultado de la búsqueda:</div>
+          <p> {{ resultadosV }}</p>
+          <p> {{ resultadosB }}</p>
+          <p> {{ resultadosE }}</p>
       </div>
     </div>
   </div>

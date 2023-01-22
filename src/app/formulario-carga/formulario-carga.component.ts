@@ -1,34 +1,33 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import data from 'src/assets/data.json';
-
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { CentrosApiService } from '../services/centros-api.service';
 @Component({
   selector: 'app-formulario-carga',
   templateUrl: './formulario-carga.component.html',
   styleUrls: ['./formulario-carga.component.scss'],
 })
-export class FormularioCargaComponent {
-  centros = data;
-  resultados = []
+export class FormularioCargaComponent{
+  resultadosV = '';
+  resultadosB = '';
+  resultadosE = '';
 
-  //al buscar, hemos de comprobar qué checkbox están marcadas y, con ellas, realizar las peticiones al back para cargar esos datos al warehouse
-  onSearch(){
-    const all = document.querySelector('#all') as HTMLInputElement
-    const baleares = document.querySelector('#baleares') as HTMLInputElement
-    const valencia = document.querySelector('#valencia') as HTMLInputElement
-    const euskadi = document.querySelector('#euskadi') as HTMLInputElement
-    console.log(euskadi.checked)
+  @ViewChild('baleares') balearesCheckBox: ElementRef;
+  @ViewChild('valencia') valenciaCheckBox: ElementRef;
+  @ViewChild('euskadi') euskadiCheckBox: ElementRef;
 
+  constructor(private centrosServices: CentrosApiService) {}
+
+
+  onSearch() {
     //Añadir consultas a la API dependiendo de si las constantes de arriba estan checked o no
+    this.resultadosV = 'Cargando datos de la Comunidad Valenciana';
+    this.resultadosB = 'Cargando datos de las Islas Baleares';
+    this.resultadosE = 'Cargando datos de Euskadi';
 
-    //Cambiar el texto del recuadro dependiendo de los resultados de estas peticiones
-    this.resultados.push('Error 1')
-  }
-
-
-  onCancel(){
-    this.resultados = []
+    this.getSomeCenters({
+      valencia: this.valenciaCheckBox.nativeElement.checked,
+      baleares: this.balearesCheckBox.nativeElement.checked,
+      euskadi: this.euskadiCheckBox.nativeElement.checked
+    })
   }
 
   //Con este método, borramos los datos almacenados en el warehouse
@@ -36,5 +35,35 @@ export class FormularioCargaComponent {
 
   }
 
-  constructor(private http: HttpClient) {}
+  private getSomeCenters(comunidades: {valencia: boolean, baleares: boolean, euskadi: boolean}) {
+    if( comunidades.valencia ) {this.centrosServices.cargaValenciaCenters().subscribe( res => res , err => { 
+      if (err.status == 200) {
+        this.resultadosV = 'Datos de la Comunidad Valenciana cargados correctamente';
+      } else {
+        this.resultadosV = 'Error en la carga de datos de la Comunidad Valenciana'
+      }
+    })} else {
+      this.resultadosV = '';
+    }
+
+    if( comunidades.baleares ) {this.centrosServices.cargaBalearesCenters().subscribe( res => res , err => { 
+      if (err.status == 200) {
+        this.resultadosB = 'Datos de las Islas Baleares cargados correctamente';
+      }
+      else {this.resultadosB = 'Error en la carga de datos de las Islas Baleares';}
+    })} else {
+      this.resultadosB = '';
+    }
+
+    if( comunidades.euskadi ) {this.centrosServices.cargaEuskadiCenters().subscribe( res => res , err => { 
+      if (err.status == 200) {
+        this.resultadosE = 'Datos de Euskadi cargados correctamente';
+      }
+      else {
+        this.resultadosE = 'Error en la carga de datos de Euskadi';
+      }
+    })} else {
+      this.resultadosE = '';
+    }
+  }
 }
