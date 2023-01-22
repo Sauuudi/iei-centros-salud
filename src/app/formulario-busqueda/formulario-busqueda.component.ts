@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { CentrosApiService } from '../services/centros-api.service';
 import { MapService } from '../services/map.service';
-import { Establecimiento } from '../shared/establecimiento.model';
 @Component({
   selector: 'app-formulario-busqueda',
   templateUrl: './formulario-busqueda.component.html',

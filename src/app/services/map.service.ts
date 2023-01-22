@@ -11,7 +11,6 @@ import VectorLayer from 'ol/layer/Vector';
 import Style from 'ol/style/Style';
 import Icon from 'ol/style/Icon';
 import FullScreen from 'ol/control/FullScreen';
-import { Establecimiento } from '../shared/establecimiento.model';
 
 const DEFAULT_CENTER_MAP = { LON:-3.7021501 , LAT:40.4176765};
 
