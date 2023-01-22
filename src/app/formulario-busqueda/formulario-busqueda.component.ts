@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { FormularioCargaComponent } from '../formulario-carga/formulario-carga.component';
+import { CentrosApiService } from '../services/centros-api.service';
 import { MapService } from '../services/map.service';
 import { Establecimiento } from '../shared/establecimiento.model';
 @Component({
@@ -12,115 +12,94 @@ export class FormularioBusquedaComponent implements OnInit {
   searchForm: FormGroup;
   mapTarget: HTMLElement;
   popup: HTMLElement;
-  establecimientos: any;
-  resultados: Establecimiento[];
+  establecimientos: any = [];
+  resultadosString: string[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
     private map: MapService,
-    private formularioCarga: FormularioCargaComponent
+    private centrosService: CentrosApiService
   ) {}
 
-  //Al iniciar el componente hemos de inicializar el mapa y el validador del form
+  //Al iniciar el componente hemos de inicializar el mapa y el validador del form, tambien carga por defecto todos lo centros
   ngOnInit() {
     this.popup = document.getElementById('popup') as HTMLElement;
     this.mapTarget = document.getElementById('map') as HTMLElement;
     this.map.initializeMap(this.mapTarget, this.popup);
-    this.initialMarkers()
-    this.checkForm();
-  }
-
-  //Este método obliga a, para poder buscar, que los datos introducidos sigan el siguiente formato
-  checkForm() {
-    this.searchForm = this.formBuilder.group({
-      city: [''],
-      postalCode: ['', Validators.pattern('[0-9]{5}')],
-      provincia: ['Cualquiera'],
-      type: ['Cualquiera'],
-    });
-  }
-
-  //Cargamos los marcadores que deben estar al inicio (es decir, todos)
-  initialMarkers(){
-    //Lo hemos de cambiar por una petición que nos los devuelva todos
-    this.establecimientos = this.formularioCarga.centros
-
-    this.establecimientos.forEach((filteredCentro: Establecimiento) => {
-      this.map.createMarker(
-        <number>(<unknown>filteredCentro.longitud),
-        <number>(<unknown>filteredCentro.latitud),
-        filteredCentro
-      );
-    })
-  }
+    this.createForm();
+    this.getAllCentros();
+  }  
 
   //En este método vamos a gestionar lo que haremos cuando pulsamos el botón de búsqueda.
-  //Para ello, nos guardaremos los valores del form, haremos peticiones a la api y, una vez tengamos la lista filtrada,
-  //crearemos un marcador para cada uno de los establecimientos resultado y pushearemos los datos obtenidos al cuadro de texto
+  //Para ello, nos guardaremos los valores del form, creamos correctamente los filtros segun el form,
+  // y llamamos a la api para cargar los centros segun los filtros
   onSearch() {
-    const busqueda: { city; postalCode; provincia; type } = this.searchForm.value;
+    const busqueda: { localidad; postalCode; provincia; tipo } = this.searchForm.value;
     this.map.clearMarkers();
-    this.resultados = [];
-
-    this.establecimientos = this.formularioCarga.centros
-
-    //En este bucle lo que vamos a hacer es recorrer el objeto búsqueda (con los valores del form) y realizar una petición a la API
-    //para aquellos valores del form que sean distintos a los por defecto, para así poder filtrar los resultados
-    Object.entries(busqueda).forEach(entry => {
-      const [key, value] = entry;
-      if(value !== '' && value !== 'Cualquiera'){
-        //Hacer aquí la petición de búsqueda
-      }
-    });
-
-    // this.centros.getCentros().subscribe((res) => {
-    //   console.log("----------" ,res);
-      
-    //   this.establecimientos = res;
-    // });
-    
-
-
-
-    //depues de la pet mostrar los centros en resultados y en el mapa con marcadores
-    //y poner el mapa con el zoom en toda españa
-    this.filterCentros(this.establecimientos, busqueda).forEach((filteredCentro: Establecimiento) => {
-      this.map.createMarker(
-        <number>(<unknown>filteredCentro.longitud),
-        <number>(<unknown>filteredCentro.latitud),
-        filteredCentro
-      );
-      this.resultados.push(filteredCentro)
-    });
+    this.popup.style.visibility = 'hidden';
+    this.resultadosString = [];
+    const filters = this.buildSearchFilters(busqueda);
+    this.getAllCentros(filters);
   }
 
   //Al pulsar el botón cancelar, volveremos al estado inicial de la página (tanto el form, como los resultados y marcadores)
   onCancel() {
     this.map.clearMarkers();
-    this.initialMarkers()
-    this.resultados = [];
     this.resetFormValues();
+    this.popup.style.visibility = 'hidden';
   }
 
   //Método para volver a los valores iniciales del form
   private resetFormValues() {
     this.searchForm.patchValue(
       {
-        city: '',
+        localidad: '',
         postalCode: '',
         provincia: 'Cualquiera',
-        type: 'Cualquiera',
+        tipo: 'Cualquiera',
       }
     )
   }
 
-  private filterCentros(centros: Establecimiento[], busqueda) {
-    
-    return centros.filter((centro) => {      
-      return ((busqueda.provincia == 'Cualquiera' || centro.provincia.toLowerCase().includes(busqueda.provincia.toLowerCase())) &&
-      (busqueda.postalCode == '' || centro.cod_postal == busqueda.postalCode) &&
-      (busqueda.city == '' || centro.localidad.toLowerCase().includes(busqueda.city.toLowerCase()))) &&
-      (busqueda.type == 'Cualquiera' || centro.tipo.toLowerCase() == busqueda.type.toLowerCase()) ;
+  //Este método crea un form y obliga a, para poder buscar, que los datos introducidos sigan el siguiente formato
+  private createForm() {
+    this.searchForm = this.formBuilder.group({
+      localidad: [''],
+      postalCode: ['', Validators.pattern('[0-9]{5}')],
+      provincia: ['Cualquiera'],
+      tipo: ['Cualquiera'],
     });
+  }
+  
+  // llama a  la api para cargar todos los centros si no se le pasa ningun filtro, o 
+  // cargar solo los centros que cumplan con los filtros que le pasamos
+  private getAllCentros(filters = {}) {
+    this.centrosService.getAllCentros(filters).subscribe((centros: any) => {
+      console.log(centros);
+      centros.data.forEach((centro) => {
+        this.map.createMarker(
+          <number>(<unknown>centro.longitud),
+          <number>(<unknown>centro.latitud),
+          centro.nombre, 
+          centro.tipo
+        );
+        this.resultadosString.push(this.getFormattedCenter(centro));
+      });
+    });
+  }
+
+  private getFormattedCenter(centro: any) {
+    return `${centro.nombre}, ${centro.direccion} (${centro.en_localidad})`
+  }
+
+  private buildSearchFilters(filtros: { localidad; postalCode; provincia; tipo }) {
+    const tipo =  filtros.tipo === 'Cualquiera' ? '' : filtros.tipo;
+    const provincia =  filtros.provincia === 'Cualquiera' ? '' : filtros.tipo;
+    return { 
+      tipo: tipo,
+      codigo_postal: filtros.postalCode,
+      en_localidad: filtros.localidad,
+      //provincia: provincia
+    }
   }
 }

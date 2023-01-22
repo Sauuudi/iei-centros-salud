@@ -12,7 +12,7 @@
             class="form-control"
             id="localidadInput"
             placeholder="Cualquiera"
-            formControlName="city"
+            formControlName="localidad"
           />
         </div>
         <div class="mb-3">
@@ -43,16 +43,16 @@
         </div>
         <div class="mb-3">
           <label for="tipoInput" class="form-label">Tipo</label>
-          <select class="form-select" id="tipoInput" formControlName="type">
+          <select class="form-select" id="tipoInput" formControlName="tipo">
             <option>Cualquiera</option>
             <option>Hospital</option>
-            <option>Centro de salud</option>
+            <option>Centro de Salud</option>
             <option>Otros</option>
           </select>
         </div>
 
         <button
-          type="button"
+          type="text"
           class="m-1 btn btn-dark"
           (click)="onSearch()"
           [disabled]="!searchForm.valid"
@@ -80,9 +80,8 @@
         <div class="resultados__title">
           Resultado de la búsqueda:
         </div>
-        <div class="resultados__content" *ngFor="let establecimiento of resultados">
-          <!-- make it seleccionable y que cuando se pulse se marque en el mapa -->
-          <p>-{{establecimiento.nombre}}</p>
+        <div class="resultados__content" *ngFor="let establecimiento of resultadosString">
+          <p>-{{establecimiento}}</p>
         </div>
       </div>
     </div>
