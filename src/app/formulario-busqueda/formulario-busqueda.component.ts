@@ -87,11 +87,13 @@ export class FormularioBusquedaComponent implements OnInit {
         );
         this.resultadosString.push(this.getFormattedCenter(centro));
       });
+    }, err => {
+      this.resultadosString.push(err);
     });
   }
 
   private getFormattedCenter(centro: any) {
-    return `${centro.nombre}, ${centro.direccion} (${centro.localidad.nombre})`
+    return `${centro.nombre}, ${centro.direccion} (${centro.localidad.nombre}) - ${centro.tipo}`;
   }
 
   private buildSearchFilters(filtros: { localidad; postalCode; provincia; tipo }) {

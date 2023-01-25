@@ -26,6 +26,9 @@ export class CentrosApiService {
       ).then(res => {
         return res.json();
       })
+      .catch(err => {
+        observer.error(err);
+      })
       .then(body => {
         observer.next(body);
         observer.complete();
